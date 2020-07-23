@@ -7,7 +7,11 @@ ENV PYTHONUNBUFFERED 1
 
 # requirements.txt file to install necessary packages, automated through pip 
 COPY ./requirements.txt /requirements.txt
+RUN apk add --update --no-cache postgresql-client
+RUN apk add --update --no-cache --virtual .tmp-build-deps \
+    gcc libc-dev linux-headers postgresql-dev
 RUN pip install -r /requirements.txt
+RUN apk del .tmp-build-deps 
 
 # create app directory on creation and change that to standard working directory 
 RUN mkdir /app
